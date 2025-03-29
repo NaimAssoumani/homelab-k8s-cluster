@@ -1,0 +1,28 @@
+---
+
+- hosts: all,!lb-node
+  become: true
+  tags: setup-pre-cluster
+  roles:
+    - {name: setup-global, tags: [packages]}
+
+
+- hosts: lb-node
+  become: true
+  tags: setup-lb
+  roles:
+    - {name: packages-lb, tags: [packages]}
+    - {name: haproxy, tags: [haproxy]}
+
+- hosts: master-node-0
+  become: true
+  tags: setup-cluster
+#  roles:
+#    - {name: k8s-cluster, tags: [packages]}
+
+
+- hosts: all,!master-node-0
+  become: true
+  tags: setup-cluster
+#  roles:
+#    - {name: k8s, tags: [packages]}
