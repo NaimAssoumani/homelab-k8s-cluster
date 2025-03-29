@@ -1,0 +1,28 @@
+---
+
+
+- name : Install packages
+  apt:
+    pkg:
+      - apt-transport-https
+      - curl
+      - ca-certificates
+      - gpg
+
+- name: Add Docker GPG key 
+  ansible.builtin.get_url:
+    url: https://download.docker.com/linux/debian/gpg
+    dest: /etc/apt/keyrings/docker-apt-keyring.asc
+    mode: '0644'
+    force: true
+
+- name: Add Docker repository 
+  ansible.builtin.apt_repository:
+    repo: 'deb [signed-by=/etc/apt/keyrings/docker-apt-keyring.asc] https://download.docker.com/linux/debian bookworn stable'
+    state: present
+    update_cache: false
+    
+- name : Install docker
+  apt:
+    pkg:
+      - docker.io

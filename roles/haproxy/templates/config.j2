@@ -1,0 +1,15 @@
+defaults
+  mode http
+  timeout client 10s
+  timeout connect 5s
+  timeout server 10s 
+  timeout http-request 10s
+
+frontend lb
+  bind :80
+  default_backend myservers
+
+backend myservers
+{% for server in master_nodes %}
+   server {{ server.name }} {{ server.ip }}:{{ backend_port }} check port {{ backend_port }}
+{% endfor %}
