@@ -1,0 +1,24 @@
+---
+
+- name: reset the node
+  command: kubeadm reset -f
+
+- name: delete the .kube directory
+  file:
+    path: /etc/kubernetes/
+    state: absent
+
+- name: delete the /etc/cni/net.d
+  file:
+    path: /etc/cni/net.d
+    state: absent
+
+- name: delete the .kube directory
+  file:
+    path: /home/debian/.kube/config
+    state: absent
+
+- name : stop kubelet service
+  service:
+    name: kubelet
+    state: stopped

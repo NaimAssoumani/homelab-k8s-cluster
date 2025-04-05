@@ -4,25 +4,26 @@
   become: true
   tags: setup-pre-cluster
   roles:
-    - {name: setup-global, tags: [packages]}
+    - {name: setup-pre-k8s, tags: [setup]}
 
 
 - hosts: lb-node
   become: true
   tags: setup-lb
   roles:
-    - {name: packages-lb, tags: [packages]}
+    - {name: packages-lb, tags: [setup]}
     - {name: haproxy, tags: [haproxy]}
 
-- hosts: master-node-0
+- hosts: all,!lb-node
   become: true
-  tags: setup-cluster
-#  roles:
-#    - {name: k8s-cluster, tags: [packages]}
+  serial: 1
+  order: sorted
+  roles:
+    - {name: desinstall-k8s, tags: [new-install, desinstall, never]}
 
-
-- hosts: all,!master-node-0
+- hosts: all,!lb-node
   become: true
-  tags: setup-cluster
-#  roles:
-#    - {name: k8s, tags: [packages]}
+  serial: 1
+  order: sorted
+  roles:
+    - {name: k8s, tags: [new-install, k8s]}
