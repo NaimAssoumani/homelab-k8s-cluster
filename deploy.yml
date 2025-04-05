@@ -4,15 +4,15 @@
   become: true
   tags: setup-pre-cluster
   roles:
-    - {name: setup-pre-k8s, tags: [setup]}
+    - {name: setup-pre-k8s, tags: [pre-k8s]}
 
 
 - hosts: lb-node
   become: true
   tags: setup-lb
   roles:
-    - {name: packages-lb, tags: [setup]}
-    - {name: haproxy, tags: [haproxy]}
+    - {name: packages-lb, tags: [pre-k8s]}
+    - {name: haproxy, tags: [pre-k8s]}
 
 - hosts: all,!lb-node
   become: true
