@@ -1,6 +1,6 @@
 # Homelab-KubeCluster-Ansible
 
-Ce code Ansible permet de provisionner un cluster Kubernetes k8s sur un ensemble 7 Vms Proxmox crées au préalable avec Ansible. Le serveur de virtualisation Proxmox est installé sur un serveur Bare Metal Ovh.
+Ce code Ansible permet de provisionner un cluster Kubernetes k8s sur un ensemble de 7 Vms Proxmox crées au préalable avec Ansible. Le serveur de virtualisation Proxmox est installé sur un serveur Bare Metal Ovh.
 
 
 L'architecture comprend :
