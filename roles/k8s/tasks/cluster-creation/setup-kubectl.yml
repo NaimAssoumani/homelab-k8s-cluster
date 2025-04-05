@@ -1,0 +1,21 @@
+---
+
+- name: Creation of the .kube directory
+  file:
+    path: /home/debian/.kube
+    owner: debian
+    group: debian
+    mode: 0750
+    state: directory
+  delegate_to: localhost
+
+- name: Copy kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: /home/debian/.kube/config
+    remote_src: true
+    owner: debian
+    group: debian
+    mode: 0650
+
+

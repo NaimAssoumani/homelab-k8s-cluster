@@ -1,0 +1,18 @@
+---
+
+- name: check the current state of the cluster
+  block:
+    - name: contact the api-server of your control plane node
+      ansible.builtin.uri:
+        url: https://localhost:6443/livez?verbose
+        validate_certs: false
+      retries: 5 # 720 * 5 seconds = 1hour (60*60/5)
+      delay: 5
+    - name: Print the gateway for each host when defined
+      ansible.builtin.debug:
+        msg: "the api-server is healthy, good job BROTHER !"
+  rescue:
+    - name: error message for api-server unhealthy
+      fail: 
+        msg: "the api-server is not healthy, you have to reset your nodes and recreate your cluster"
+

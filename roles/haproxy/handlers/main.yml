@@ -1,0 +1,7 @@
+---
+
+- name: Restart container haproxy
+  community.docker.docker_container:
+    name: load-balancer-ha
+    restart: true
+  when: load_balancer_ha_status.exists

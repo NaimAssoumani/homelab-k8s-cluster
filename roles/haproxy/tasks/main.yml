@@ -1,0 +1,38 @@
+---
+
+- name: Get facts on current container
+  community.docker.docker_container_info:
+     name: load-balancer-ha
+  register: load_balancer_ha_status
+
+- name : Pull haporxy image
+  community.docker.docker_image:
+    name: haproxy:3.1.6
+    source: pull
+
+- name: Create configuration directory
+  file:
+    path: /etc/haproxy
+    state: directory
+    owner: debian
+    group: debian
+    mode: 0777
+
+- name: copy template
+  template:
+    src: config.j2
+    dest: /etc/haproxy/config.cfg
+    owner: debian
+    group: debian
+    mode: 0777
+  notify: Restart container haproxy
+    
+- name: Run container haproxy
+  community.docker.docker_container:
+    name: load-balancer-ha
+    image: haproxy:3.1.6
+    ports:
+      - "80:80"
+    volumes:
+      - "/etc/haproxy/config.cfg:/usr/local/etc/haproxy/haproxy.cfg"
+    restart: false

@@ -1,0 +1,12 @@
+[master-node]
+master-node-0
+master-node-1
+master-node-2 
+
+[worker-node]
+worker-node-0
+worker-node-1
+worker-node-2 
+
+[lb-node]
+lb-node

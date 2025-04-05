@@ -1,0 +1,12 @@
+---
+
+- name: add additonal repository for docker & kuberntes
+  import_tasks: add-repository.yml
+
+- name: packages installation for k8s
+  import_tasks: packages-installation.yml
+  
+- name: global configuration of the host
+  import_tasks: host-configuration.yml
+
+

@@ -1,0 +1,17 @@
+---
+
+- name: check if kubelet is up
+  ansible.builtin.service_facts:
+
+- name: create the cluster
+  include_tasks: cluster-creation/main.yml
+  when: ansible_facts['services']['kubelet.service']['state'] == "stopped"
+
+- name: check the state of the cluster from the nodes
+  include_tasks: check-cluster/main.yml
+  when: node_type == "master"
+
+
+
+
+
