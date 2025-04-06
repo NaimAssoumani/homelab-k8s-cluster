@@ -2,11 +2,11 @@
 
 - name : init the cluster
   command: kubeadm init --upload-certs --control-plane-endpoint {{ control_plane_endpoint }}:{{ control_plane_endpoint_port }} --pod-network-cidr {{ pod_network_cidr }}
-  when:  inventory_hostname == "master-node-0"
+  when:  inventory_hostname == "master-0.k8s.assouman"
 
 - name : add the control-plane and worker nodes to the cluster
   include_tasks: nodes-configuration.yml
-  when:  inventory_hostname != "master-node-0"
+  when:  inventory_hostname != "master-0.k8s.assouman"
 
 - name : configuration of kubectl for the debian user 
   include_tasks: setup-kubectl.yml

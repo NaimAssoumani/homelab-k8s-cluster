@@ -1,0 +1,15 @@
+---
+plugin: community.general.proxmox
+url: https://ns3210062.ip-146-59-70.eu:8006
+user: "{{ lookup('ansible.builtin.ini', 'vault_user_proxmox_account', section='proxmox_account', file='inventories/vault.ini') }}"
+password: "{{ lookup('ansible.builtin.ini', 'vault_password_proxmox_account', section='proxmox_account', file='inventories/vault.ini') }}"
+validate_certs: false
+want_facts: true
+want_proxmox_nodes_ansible_host: false
+compose:
+  ansible_host: proxmox_agent_interfaces[1]["ip-addresses"][0].split('/')[0]
+cache: false
+groups:
+  master: "'master' in proxmox_name"
+  worker: "'worker' in proxmox_name"
+  lb: "'lb' in proxmox_name"

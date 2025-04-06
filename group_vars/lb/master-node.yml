@@ -1,11 +1,11 @@
 ---
 
 control_plane_nodes:
-  - name: master-node-0
+  - name: master-0.k8s.assouman
     ip : 10.0.0.2
-  - name: master-node-1
+  - name: master-1.k8s.assouman
     ip : 10.0.0.3
-  - name: master-node-2
+  - name: master-2.k8s.assouman
     ip : 10.0.0.4
 
 api_server_port: 6443
