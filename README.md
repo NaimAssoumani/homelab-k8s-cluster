@@ -14,16 +14,61 @@ Voici ci-dessous un schéma de l'architecture deployé :
 
 Les roles Ansible utilisés sont les suivants :
 * `setup-pre-k8s` qui installe les différentes dépendances pour la création du cluster et configure les hosts au niveau du noyau, réseau
-* `packages-lb`qui installe les preréquis pour installer haporxy en tant que load-balancer.
+* `packages-lb`qui installe les preréquis pour installer haproxy en tant que load-balancer.
 * `haproxy` installe un conteneur docker `haproxy` qui sera utilisé en tant que loadbalancer pour les master nodes et l'api server.
 * `k8s` crée le cluster. Le rôle initialise le cluster sur l'instance nommée `master-node-0` puis exécute les commandes join sur les autres machines master et sur les machines workers. Le rôle est idempotent, si le cluster est déjà initialisé ou si le service `kubelet` est up sur le node en question, il véfifiera juste que le cluster est dans un état correct en effectuant un curl sur l'url de healthcheck de l'`api server` .
 * `desinstall-k8s`, ce rôle permet de désinstaller k8s sur l'ensembles des vms.
 
-Pour utiliser ce code, il faut disposer d'un inventaire statique ou dynamique pour viser les Vms Proxmox.
+Pour utiliser ce code, il faut disposer d'un inventaire dynamique pour viser les Vms Proxmox.
+
+Voici la structure de l'inventaire utilisé dans ce repo:
+
+```
+---
+plugin: community.general.proxmox
+url: https://ns3210062.ip-146-59-70.eu:8006
+user: "{{ lookup('ansible.builtin.ini', 'vault_user_proxmox_account', section='proxmox_account', file='inventories/vault.ini') }}"
+password: "{{ lookup('ansible.builtin.ini', 'vault_password_proxmox_account', section='proxmox_account', file='inventories/vault.ini') }}"
+validate_certs: false
+want_facts: true
+want_proxmox_nodes_ansible_host: true
+cache: false
+groups:
+  master: "'master' in proxmox_name"
+  worker: "'worker' in proxmox_name"
+  lb: "'lb' in proxmox_name"
+```
+
+Ce fichier est utilisé en complement avec un vault.ini structuré de la manière suivante:
+
+```
+[proxmox_account]
+vault_user_proxmox_account = pasmonuseridiot@pve
+vault_password_proxmox_account = pasmonmotdepasseidiot
+```
+
+Ce fichier détient des données sensibles, il faut donc le vaulter avec ansible-vault. 
+
+La configuration globale pour utiliser ce repo est défini dans un ansible.cfg à la racine avec cette structure suivante:
+
+```
+[defaults]
+inventory = ./inventories/host-proxmox.yml
+host_key_checking = False
+forks = 10
+roles_path = ./roles
+vault_password_file=../vaults/vault_password_k8s_ansible
+[inventory]
+enable_plugins = host_list, script, auto, yaml, community.general.proxmox, file
+
+[ssh_connection]
+pipelining = True
+```
+
 
 On peut exécuter la commande suivante suivie du tag voulue selon le contexte :
 ```
-ansible-playbook -i inventories/host deploy.yml -t <tag>
+ansible-playbook deploy.yml -t <tag>
 ```
 
 Voici les contextes d'utilisation des tags globaux:
@@ -36,5 +81,5 @@ Après la création du cluster, il faut installer un `cni` afin que les différe
 
 La command ansible-console est parfaite pour cela:
 ```
-ansible-console -i inventories/hosts -l '!lb-node'
+ansible-console -l '!lb-node'
 ```
