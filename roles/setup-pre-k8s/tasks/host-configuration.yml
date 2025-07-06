@@ -24,6 +24,7 @@
   loop:
     - overlay
     - br_netfilter
+    - iscsi_tcp
 
 - name: Configure systctl
   ansible.posix.sysctl:

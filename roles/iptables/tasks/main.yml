@@ -1,0 +1,41 @@
+---
+
+
+- name: Forward port 80 to 80
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    destination: 146.59.70.36
+    destination_port: 80
+    jump: DNAT
+    to_destination: 10.0.0.9:80
+    comment: Redirect web traffic to port 80
+  become: yes
+
+- name: Forward port 443 to 443
+  ansible.builtin.iptables:
+    table: nat
+    chain: PREROUTING
+    protocol: tcp
+    match: tcp
+    destination: 146.59.70.36
+    destination_port: 443
+    jump: DNAT
+    to_destination: 10.0.0.9:443
+    comment: Redirect web traffic to port 443
+  become: yes
+
+- name: Rule for cert-manager
+  ansible.builtin.iptables:
+    table: nat
+    chain: POSTROUTING
+    protocol: tcp
+    match: tcp
+    destination: 10.0.0.0/24
+    destination_port: 80
+    jump: MASQUERADE
+    comment: rule for cert-amanager
+  become: yes
+
