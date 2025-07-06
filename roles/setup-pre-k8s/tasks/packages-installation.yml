@@ -13,7 +13,8 @@
       - kubelet
       - containerd
       - python3-pip
-
+      - open-iscsi
+      - nfs-common
 
 - name: Hold kube services 
   dpkg_selections:

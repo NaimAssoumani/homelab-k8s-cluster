@@ -1,5 +1,11 @@
 ---
 
+- hosts: ns3210062
+  become: true
+  tags: setup-pre-cluster
+  roles:
+    - {name: iptables, tags: [iptables]}
+
 - hosts: master,worker
   become: true
   tags: setup-pre-cluster

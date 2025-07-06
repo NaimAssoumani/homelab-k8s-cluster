@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.1.0
+ * 
+
 ## Version 2.0.0
  * Passage d'un inventaire statique à un inventaire dynamique, changement de nom de group_vars et d'host sur le playbook `deploy.yml`
  
