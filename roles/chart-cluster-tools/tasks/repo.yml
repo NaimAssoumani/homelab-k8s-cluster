@@ -1,0 +1,9 @@
+---
+
+- name: add chart repo for helm 
+  kubernetes.core.helm_repository:
+    name: "{{ repo.name }}"
+    repo_url: "{{ repo.url }}"
+  loop: "{{ helm_repo }}"
+  loop_control:
+    loop_var: repo

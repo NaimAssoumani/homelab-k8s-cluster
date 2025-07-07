@@ -1,0 +1,21 @@
+---
+
+helm_repo:
+  - name: prometheus-community
+    url: https://prometheus-community.github.io/helm-charts
+  - name: haproxy-ingress
+    url: https://haproxy-ingress.github.io/charts 
+  - name: metallb
+    url: https://metallb.github.io/metallb
+  - name: jetstack
+    url: https://charts.jetstack.io
+  - name: flannel
+    url: https://flannel-io.github.io/flannel/
+  - name: argo-repo
+    url: https://argoproj.github.io/argo-helm 
+
+default_chart:
+  - name_release: cert-manager
+    name_chart: jetstack/cert-manager
+    namespace: cert-manager
+    version: v1.18.0
