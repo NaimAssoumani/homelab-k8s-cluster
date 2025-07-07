@@ -1,0 +1,24 @@
+---
+
+- name: Deploy chart with default values
+  kubernetes.core.helm:
+    name: "{{ chart.name_release }}"
+    chart_ref: "{{ chart.name_chart }}"
+    release_namespace: "{{ chart.namespace }}"
+    create_namespace: true
+    wait: true
+    chart_version: "{{ chart.version }}"
+    host: https://cluster.assouman:80
+    kubeconfig: /home/debian/.kube/config
+  loop: "{{ default_chart }}"
+  loop_control:
+    loop_var: chart
+
+- name: Deploy chart with specific values
+  kubernetes.core.helm:
+    name: "{{ chart.name }}"
+    chart_ref: "{{ chart.name }}"
+    release_namespace: "{{ chart.namespace }}"
+    create_namespace: true
+    wait: true
+    values: templates/"{{ chart.name  }}"/values

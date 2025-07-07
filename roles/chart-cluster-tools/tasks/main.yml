@@ -1,0 +1,7 @@
+---
+
+- name: add repo
+  import_tasks: repo.yml
+
+- name: install chart
+  import_tasks: installation.yml 
