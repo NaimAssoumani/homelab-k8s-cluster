@@ -1,6 +1,8 @@
 ---
 
 - name: Create k8s namespace Flannel
+  vars:
+    ansible_python_interpreter: /home/debian/.local/pipx/venvs/ansible-core/bin/python
   kubernetes.core.k8s:
     host: https://cluster.assouman:80
     kubeconfig: /home/debian/.kube/config
@@ -13,6 +15,8 @@
           pod-security.kubernetes.io/enforce: privileged        
 
 - name: Create k8s namespace without labels
+  vars:
+    ansible_python_interpreter: /home/debian/.local/pipx/venvs/ansible-core/bin/python
   kubernetes.core.k8s:
     host: https://cluster.assouman:80
     kubeconfig: /home/debian/.kube/config
