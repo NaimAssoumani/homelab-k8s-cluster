@@ -1,5 +1,9 @@
 # Changelog
 
+## Version 2.2.0
+ * feat: rôle pour créer les namespaces de base
+ * feat: rôle pour installer via helm et le module kubernetes, les charts de base dans le cluster
+ 
 ## Version 2.1.0
   * Installation des dépendances de longhorn pour l'infra 
   * Rajout de la gestion des IpTables as Code avec Ansible

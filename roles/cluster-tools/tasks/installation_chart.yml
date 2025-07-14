@@ -1,0 +1,49 @@
+---
+
+
+- name: Deploy chart with default values
+  kubernetes.core.helm:
+    name: "{{ chart.name_release }}"
+    chart_ref: "{{ chart.name_chart }}"
+    release_namespace: "{{ chart.namespace }}"
+    create_namespace: true
+    chart_version: "{{ chart.version }}"
+    host: https://cluster.assouman:80
+    kubeconfig: /home/debian/.kube/config
+  loop: "{{ default_chart }}"
+  loop_control:
+    loop_var: chart
+
+- name: Pause for 2 minutes for pods
+  ansible.builtin.pause:
+    minutes: 2
+
+- name: deploy metallb objects for the cluster
+  vars:
+    ansible_python_interpreter: /home/debian/.local/pipx/venvs/ansible-core/bin/python
+  kubernetes.core.k8s:
+    state: present
+    src: "{{ manifest }}"
+    host: https://cluster.assouman:80
+    kubeconfig: /home/debian/.kube/config
+  loop:
+    - /home/debian/workspace/homelab-kubecluster-ansible/manifest/metallb/ippools.yml
+    - /home/debian/workspace/homelab-kubecluster-ansible/manifest/metallb/l2advertisment.yml
+  loop_control:
+    loop_var: manifest
+    
+- name: Deploy chart with specific values
+  kubernetes.core.helm:
+    name: "{{ chart.name_release }}"
+    chart_ref: "{{ chart.name_chart }}"
+    release_namespace: "{{ chart.namespace }}"
+    create_namespace: true
+    wait: true
+    host: https://cluster.assouman:80
+    kubeconfig: /home/debian/.kube/config
+    values_files:
+      - /home/debian/workspace/homelab-kubecluster-ansible/values/{{ chart.name_release }}/values.yml
+  loop: "{{ chart_with_value }}"
+  loop_control:
+    loop_var: chart
+  
