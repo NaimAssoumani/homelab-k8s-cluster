@@ -1,0 +1,12 @@
+---
+
+- name: restart containerd
+  vars:
+    hosts: "{{ groups[master_group_name] | community.general.lists_union(groups[worker_group_name]) }}"
+  ansible.builtin.service:
+    name: containerd
+    state: restarted
+  delegate_to: "{{ host }}"
+  loop: "{{ hosts }}"
+  loop_control:
+    loop_var: host

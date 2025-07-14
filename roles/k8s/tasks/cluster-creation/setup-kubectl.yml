@@ -18,3 +18,11 @@
     mode: 0650
 
 
+- name: Copy kube config for node proxmox
+  fetch:
+    src: /home/debian/.kube/config
+    dest: /home/debian/.kube/config
+    owner: debian
+    group: debian
+    flat: true
+    mode: 0650

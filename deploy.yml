@@ -33,3 +33,11 @@
   order: sorted
   roles:
     - {name: k8s, tags: [new-install, k8s]}
+
+
+- hosts: ns3210062
+  become: true
+  tags: cluster-tools    
+  roles:
+    - {name: namespace, tags: [namespace]}
+    - {name: cluster-tools, tags: [tools]}

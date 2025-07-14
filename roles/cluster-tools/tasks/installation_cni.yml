@@ -1,0 +1,19 @@
+---
+
+- name: Deploy flannel chart
+  kubernetes.core.helm:
+    name: "{{ flannel_chart.name_release }}"
+    chart_ref: "{{ flannel_chart.name_chart }}"
+    release_namespace: "{{ flannel_chart.namespace }}"
+    create_namespace: true
+    wait: true
+    chart_version: "{{ flannel_chart.version }}"
+    host: https://cluster.assouman:80
+    kubeconfig: /home/debian/.kube/config
+    values_files:
+      - /home/debian/workspace/homelab-kubecluster-ansible/values/flannel/values.yml
+  notify: restart containerd
+
+- name: Pause for 2 minutes to build app cache
+  ansible.builtin.pause:
+    minutes: 1

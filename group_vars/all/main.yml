@@ -8,3 +8,5 @@ sysctl_config:
 control_plane_endpoint: cluster.assouman
 control_plane_endpoint_port: 80
 pod_network_cidr: 10.244.0.0/16
+master_group_name: master
+worker_group_name: worker

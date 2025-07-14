@@ -1,0 +1,6 @@
+---
+
+namespace_without_labels:
+  - dev
+  - qual
+  - prod
