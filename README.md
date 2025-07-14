@@ -13,11 +13,15 @@ Voici ci-dessous un schéma de l'architecture deployé :
 ![schema](schema-archi-cluster.png "schema")
 
 Les roles Ansible utilisés sont les suivants :
+* ``iptables` installe les rules Iptables nécessaires au bon fonctionnement du Cluster.
+* `desinstall-k8s`, ce rôle permet de désinstaller k8s sur l'ensembles des vms.
 * `setup-pre-k8s` qui installe les différentes dépendances pour la création du cluster et configure les hosts au niveau du noyau, réseau
 * `packages-lb`qui installe les preréquis pour installer haproxy en tant que load-balancer.
 * `haproxy` installe un conteneur docker `haproxy` qui sera utilisé en tant que loadbalancer pour les master nodes et l'api server.
 * `k8s` crée le cluster. Le rôle initialise le cluster sur l'instance nommée `master-node-0` puis exécute les commandes join sur les autres machines master et sur les machines workers. Le rôle est idempotent, si le cluster est déjà initialisé ou si le service `kubelet` est up sur le node en question, il véfifiera juste que le cluster est dans un état correct en effectuant un curl sur l'url de healthcheck de l'`api server` .
 * `desinstall-k8s`, ce rôle permet de désinstaller k8s sur l'ensembles des vms.
+* `namespace`, ce rôle permet de créer les namespaces de base, après la création du cluster.
+* `cluster-tools`, ce rôle installe tout les outils nécessaires au cluster via Helm et des manifest. Les outils installés sont l'ingress d'haproxy, flannel, metal-lb, etc...
 
 Pour utiliser ce code, il faut disposer d'un inventaire dynamique pour viser les Vms Proxmox.
 
@@ -72,9 +76,10 @@ ansible-playbook deploy.yml -t <tag>
 ```
 
 Voici les contextes d'utilisation des tags globaux:
+* `setup-pre-cluster` met en place tout les prérequis pour que l'installation du cluster et le cluster fonctionne
 * `k8s` crée le cluster k8s
-* `pre-k8s`met en place tout les prérequis pour que l'installation du cluster fonctionne
 * `new-install` désinstalle le cluster puis relance une installation
+* `cluster-tools` installe les outils du CLuster via Helm et des manifest
 
 
 Après la création du cluster, il faut installer un `cni` afin que les différents nodes soient Ready, après cette installation, il faut redémarrer containerd sur l'ensemble du cluster.
