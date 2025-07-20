@@ -18,6 +18,12 @@ jobs:
       image: debian:bookworm-slim
     if: github.event_name == 'pull_request'
     steps:
+      - name: update
+        shell: bash
+        run: apt-get update
+      - name: install git
+        shell: bash
+        run: apt-get install git -y
       - name: Clone the repo manually
         shell: bash
         run: |
@@ -25,15 +31,6 @@ jobs:
           git config --global user.email "github-actions@users.noreply.github.com"
           git clone https://github.com/${GITHUB_REPOSITORY} .
           git fetch --all --tags     
-      - name: update
-        shell: bash
-        run: apt-get update
-      - name: install git
-        shell: bash
-        run: apt-get install git -y
-      - name: install gh
-        shell: bash
-        run: apt-get install gh -y 
       - name: check changelog
         shell: bash
         run: |
