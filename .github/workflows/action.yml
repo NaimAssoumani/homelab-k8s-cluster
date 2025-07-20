@@ -37,6 +37,7 @@ jobs:
         shell: bash
         run: |
            cd /__w/homelab-k8s-cluster/homelab-k8s-cluster
+           ls -al
            NEW_CHANGELOG=$(git diff CHANGELOG.md ) 
            if [ -z "$NEW_CHANGELOG" ]; then
              echo "there are no new version because the changelog is empty"
