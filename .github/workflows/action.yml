@@ -18,7 +18,6 @@ jobs:
       image: debian:bookworm-slim
     if: github.event_name == 'pull_request'
     steps:
-      - name: My first stupid step - check out repository
       - name: Clone the repo manually
         shell: bash
         run: |
