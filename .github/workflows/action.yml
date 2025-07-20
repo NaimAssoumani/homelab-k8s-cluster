@@ -20,6 +20,7 @@ jobs:
     steps:
       - name: My first stupid step - check out repository
       - name: Clone the repo manually
+        shell: bash
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@users.noreply.github.com"
