@@ -19,11 +19,12 @@ jobs:
     if: github.event_name == 'pull_request'
     steps:
       - name: My first stupid step - check out repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          fetch-tags: true
-          ref: main         
+      - name: Clone the repo manually
+        run: |
+          git config --global user.name "github-actions"
+          git config --global user.email "github-actions@users.noreply.github.com"
+          git clone https://github.com/${GITHUB_REPOSITORY} .
+          git fetch --all --tags     
       - name: update
         shell: bash
         run: apt-get update
