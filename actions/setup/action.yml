@@ -1,0 +1,20 @@
+---
+
+name: setup for the release-management
+
+author: Naïm Assoumani
+
+descritption: actions to setup the environment for the release management
+
+runs:
+  using: "composite"
+  steps:
+    - name: update
+      shell: bash
+      run: apt-get update
+    - name: install git
+      shell: bash
+      run: apt-get install git -y
+    - name: install gh
+      shell: bash
+      run: apt-get install gh -y 

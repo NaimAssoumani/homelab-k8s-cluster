@@ -1,0 +1,28 @@
+---
+
+name: publish for the release-management
+
+author: Naïm Assoumani
+
+descritption: actions to publish a new version with the release management
+
+runs:
+  using: "composite"
+  steps:
+    - name: get new version
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE
+         NEW_TAG=$( git diff CHANGELOG.md | grep Version | grep -oE '[1-9]*[0-9]*\.[1-9]*[0-9]\.[1-9][0-9]*')
+    - name: creat new changelog
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE
+        NEW_CHANGELOG=$(git diff CHANGELOG.md ) | grep '*' | tr -d '+'
+        echo "# Description" > new_release.md
+        echo $NEW_CHANGELOG >> new_release.md
+    - name: publish release
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE
+        gh release create $NEW_TAG --title "release $NEW_TAG" -F release-notes.md

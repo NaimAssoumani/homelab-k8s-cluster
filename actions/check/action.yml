@@ -1,0 +1,38 @@
+---
+
+name: check for the release-management
+
+author: Naïm Assoumani
+
+descritption: actions to check the new version to publish with the release management
+
+runs:
+  using: "composite"
+  steps:
+    - name: check changelog
+      shell: bash
+      run: |
+         cd /__w/homelab-k8s-cluster/homelab-k8s-cluster
+         NEW_CHANGELOG=$(git diff CHANGELOG.md ) 
+         if [ -z "$NEW_CHANGELOG" ]; then
+           echo "there are no new version because the changelog is empty"
+            exit 1
+          fi
+    - name: get old version
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE
+        OLD_TAG=$(git tag -l | tail -n1)
+        if [ -z "$OLD_TAG" ]; then
+          echo "it is strange, you do not have previous tag"
+          exit 1
+        fi
+    - name: get new version
+      shell: bash
+      run: |
+        cd $GITHUB_WORKSPACE
+        NEW_TAG=$( git diff CHANGELOG.md | grep Version | grep -oE '[1-9]*[0-9]*\.[1-9]*[0-9]\.[1-9][0-9]*')
+        if [ -z "$NEW_TAG" ]; then
+          echo "How the fuck, am i suppose to create a new tag, you did not precise one"
+          exit 1
+        fi

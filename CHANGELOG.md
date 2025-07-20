@@ -1,5 +1,8 @@
 # Changelog
 
+## Version 2.3.0
+ * feat: rajout d'action github pour la création des tags
+
 ## Version 2.2.0
  * feat: rôle pour créer les namespaces de base
  * feat: rôle pour installer via helm et le module kubernetes, les charts de base dans le cluster
